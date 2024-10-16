@@ -15,5 +15,10 @@ pipeline {
                 sh 'mvn clean compile'
             }
         }
+        stage('MVN SonarQube Analysis') {
+            steps {
+                sh 'mvn sonar:sonar'
+            }
+        }
     }
 }
