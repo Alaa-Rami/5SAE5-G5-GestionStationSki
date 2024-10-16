@@ -17,7 +17,14 @@ pipeline {
         }
         stage('MVN SonarQube Analysis') {
             steps {
-                sh 'mvn sonar:sonar'
+                withCredentials([string(credentialsId: 'sonar_token', variable: 'SONAR_TOKEN')]) {
+                    sh '''
+                        mvn sonar:sonar \
+                        -Dsonar.projectKey=5SAE5-G5-Foyer \
+                        -Dsonar.host.url=http://192.168.50.4:9000 \
+                        -Dsonar.login=$SONAR_TOKEN
+                    '''
+                }
             }
         }
     }
