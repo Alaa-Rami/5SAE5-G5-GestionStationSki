@@ -15,7 +15,7 @@ pipeline {
                 // Injecting credentials into the Maven settings.xml file at runtime
                 withCredentials([usernamePassword(credentialsId: 'nexus_credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
                     // Create a temporary settings.xml file
-                    writeFile(file: 'settings.xml', text: '''
+                    writeFile(file: 'settings.xml', text: """
 <settings>
     <servers>
         <server>
@@ -26,13 +26,18 @@ pipeline {
     </servers>
 </settings>
                     ''')
-                    // Run the Maven command with the temporary settings.xml
-                    sh '''
-                        mvn clean compile deploy \
-                        -s settings.xml \
-                        -DaltDeploymentRepository=deploymentRepo::default::http://192.168.50.4:8081/repository/maven-releases/ \
-                        -X
-                    '''
+                    try {
+                        sh '''
+                            mvn clean compile deploy \
+                            -s settings.xml \
+                            -DaltDeploymentRepository=deploymentRepo::default::http://192.168.50.4:8081/repository/maven-releases/ \
+                            -X
+                        '''
+                    } catch (Exception e) {
+                        echo "Maven deployment failed: ${e.getMessage()}"
+                        error "Aborting build"
+                    }
+
                 }
             }
         }
