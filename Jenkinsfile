@@ -26,16 +26,18 @@ pipeline {
     </servers>
 </settings>
                     """)
-                    try {
-                        sh '''
-                            mvn clean compile deploy \
-                            -s settings.xml \
-                            -DaltDeploymentRepository=deploymentRepo::default::http://192.168.50.4:8081/repository/maven-releases/ \
-                            -X
-                        '''
-                    } catch (Exception e) {
-                        echo "Maven deployment failed: ${e.getMessage()}"
-                        error "Aborting build"
+                    script {
+                        try {
+                            sh '''
+                                mvn clean compile deploy \
+                                -s settings.xml \
+                                -DaltDeploymentRepository=deploymentRepo::default::http://192.168.50.4:8081/repository/maven-releases/ \
+                                -X
+                            '''
+                        } catch (Exception e) {
+                            echo "Maven deployment failed: ${e.getMessage()}"
+                            error "Aborting build"
+                        }
                     }
                 }
             }
