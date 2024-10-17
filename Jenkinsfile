@@ -12,7 +12,14 @@ pipeline {
         }
         stage('Compile Stage') {
             steps {
-                sh 'mvn clean compile deploy'
+                 {
+                    sh '''
+                        mvn clean compile deploy \
+                        -DaltDeploymentRepository=deploymentRepo::default::http://192.168.50.4:8081/repository/maven-releases/ \
+                        -Dusername=admin \
+                        -Dpassword=nexus
+                    '''
+                }
             }
         }
         stage('MVN SonarQube Analysis') {
