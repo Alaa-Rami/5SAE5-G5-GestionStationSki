@@ -25,7 +25,7 @@ pipeline {
         </server>
     </servers>
 </settings>
-                    ''')
+                    """)
                     try {
                         sh '''
                             mvn clean compile deploy \
@@ -37,7 +37,6 @@ pipeline {
                         echo "Maven deployment failed: ${e.getMessage()}"
                         error "Aborting build"
                     }
-
                 }
             }
         }
