@@ -12,12 +12,25 @@ pipeline {
         }
         stage('Compile and Deploy') {
             steps {
+                // Injecting credentials into the Maven settings.xml file at runtime
                 withCredentials([usernamePassword(credentialsId: 'nexus_credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
+                    // Create a temporary settings.xml file
+                    writeFile(file: 'settings.xml', text: '''
+<settings>
+    <servers>
+        <server>
+            <id>deploymentRepo</id>
+            <username>$NEXUS_USERNAME</username>
+            <password>$NEXUS_PASSWORD</password>
+        </server>
+    </servers>
+</settings>
+                    ''')
+                    // Run the Maven command with the temporary settings.xml
                     sh '''
                         mvn clean compile deploy \
-                        -DaltDeploymentRepository=deploymentRepo::default::http://192.168.50.4:8081/repository/maven-releases/ \
-                        -Dusername=$NEXUS_USERNAME \
-                        -Dpassword=$NEXUS_PASSWORD
+                        -s settings.xml \
+                        -DaltDeploymentRepository=deploymentRepo::default::http://192.168.50.4:8081/repository/maven-releases/
                     '''
                 }
             }
