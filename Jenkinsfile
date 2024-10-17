@@ -30,7 +30,8 @@ pipeline {
                     sh '''
                         mvn clean compile deploy \
                         -s settings.xml \
-                        -DaltDeploymentRepository=deploymentRepo::default::http://192.168.50.4:8081/repository/maven-releases/
+                        -DaltDeploymentRepository=deploymentRepo::default::http://192.168.50.4:8081/repository/maven-releases/ \
+                        -X
                     '''
                 }
             }
