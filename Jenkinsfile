@@ -10,19 +10,19 @@ pipeline {
                 git branch: 'AlaaRami_5SAE5_G5', url: 'https://github.com/Alaa-Rami/5SAE5-G5-Foyer.git'
             }
         }
-        stage('Compile Stage') {
+        stage('Compile and Deploy') {
             steps {
-                 {
+                withCredentials([usernamePassword(credentialsId: 'nexus_credentials', usernameVariable: 'NEXUS_USERNAME', passwordVariable: 'NEXUS_PASSWORD')]) {
                     sh '''
                         mvn clean compile deploy \
                         -DaltDeploymentRepository=deploymentRepo::default::http://192.168.50.4:8081/repository/maven-releases/ \
-                        -Dusername=admin \
-                        -Dpassword=nexus
+                        -Dusername=$NEXUS_USERNAME \
+                        -Dpassword=$NEXUS_PASSWORD
                     '''
                 }
             }
         }
-        stage('MVN SonarQube Analysis') {
+        stage('SonarQube Analysis') {
             steps {
                 withCredentials([string(credentialsId: 'sonar_token', variable: 'SONAR_TOKEN')]) {
                     sh '''
