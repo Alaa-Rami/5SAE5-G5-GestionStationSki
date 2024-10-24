@@ -26,7 +26,7 @@ public class Bloc {
     long capaciteBloc
 
     @ManyToOne(cascade = CascadeType.ALL)
-    Foyer foyer;
+    Foyer foyer
 
     @OneToMany(mappedBy = "bloc")
     @JsonIgnore
