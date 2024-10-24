@@ -23,7 +23,7 @@ public class Bloc {
     long idBloc
 
     String nomBloc;
-    long capaciteBloc;
+    long capaciteBloc
 
     @ManyToOne(cascade = CascadeType.ALL)
     Foyer foyer;
