@@ -20,13 +20,13 @@ public class Bloc {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    long idBloc
+    long idBloc;
 
     String nomBloc;
-    long capaciteBloc
+    long capaciteBloc;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    Foyer foyer
+    Foyer foyer;
 
     @OneToMany(mappedBy = "bloc")
     @JsonIgnore
