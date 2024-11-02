@@ -1,4 +1,4 @@
-version: '3.8'
+#version: '3.8'
 
 services:
   mysqldb:
@@ -18,7 +18,7 @@ services:
     build: ./
     restart: on-failure
     ports:
-      - "8069:8069"
+      - "8089:8089"
     environment:
       SPRING_APPLICATION_JSON: '{
         "spring.datasource.url": "jdbc:mysql://mysqldb:3306/tpfoyer?createDatabaseIfNotExist=true",
