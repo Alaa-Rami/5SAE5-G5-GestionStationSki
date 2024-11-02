@@ -1,5 +1,6 @@
 package tn.esprit.tpfoyer;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -18,9 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-
 public class MyServiceTest {
-
 
     @Mock
     private FoyerRepository foyerRepository;
@@ -28,40 +27,55 @@ public class MyServiceTest {
     @InjectMocks
     private FoyerServiceImpl foyerService;
 
+    private Foyer foyer;
+    private List<Foyer> listFoyers;
+
+    @BeforeEach
+    void setUp() {
+        foyer = new Foyer();
+        foyer.setIdFoyer(1L);
+        foyer.setNomFoyer("Central Foyer");
+        foyer.setCapaciteFoyer(200);
+
+        Foyer foyer1 = new Foyer();
+        foyer1.setIdFoyer(2L);
+        foyer1.setNomFoyer("East Foyer");
+        foyer1.setCapaciteFoyer(150);
+
+        Foyer foyer2 = new Foyer();
+        foyer2.setIdFoyer(3L);
+        foyer2.setNomFoyer("West Foyer");
+        foyer2.setCapaciteFoyer(250);
+
+        listFoyers = Arrays.asList(foyer1, foyer2);
+    }
+
     @Test
     void testRetrieveAllFoyers() {
-        // Arrange
-        Foyer foyer1 = new Foyer();
-        Foyer foyer2 = new Foyer();
-        List<Foyer> foyers = Arrays.asList(foyer1, foyer2);
-        when(foyerRepository.findAll()).thenReturn(foyers);
+        when(foyerRepository.findAll()).thenReturn(listFoyers);
 
-        // Act
         List<Foyer> result = foyerService.retrieveAllFoyers();
 
-        // Assert
         assertEquals(2, result.size());
+        assertEquals("East Foyer", result.get(0).getNomFoyer());
         verify(foyerRepository, times(1)).findAll();
     }
 
     @Test
     void testRetrieveFoyer() {
-        // Arrange
-        Foyer foyer = new Foyer();
         when(foyerRepository.findById(1L)).thenReturn(Optional.of(foyer));
 
-        // Act
         Foyer result = foyerService.retrieveFoyer(1L);
 
         // Assert
         assertNotNull(result);
+        assertEquals("Central Foyer", result.getNomFoyer());
         verify(foyerRepository, times(1)).findById(1L);
     }
 
     @Test
     void testAddFoyer() {
         // Arrange
-        Foyer foyer = new Foyer();
         when(foyerRepository.save(foyer)).thenReturn(foyer);
 
         // Act
@@ -69,13 +83,13 @@ public class MyServiceTest {
 
         // Assert
         assertNotNull(result);
+        assertEquals("Central Foyer", result.getNomFoyer());
         verify(foyerRepository, times(1)).save(foyer);
     }
 
     @Test
     void testModifyFoyer() {
         // Arrange
-        Foyer foyer = new Foyer();
         when(foyerRepository.save(foyer)).thenReturn(foyer);
 
         // Act
@@ -83,6 +97,7 @@ public class MyServiceTest {
 
         // Assert
         assertNotNull(result);
+        assertEquals(200, result.getCapaciteFoyer());
         verify(foyerRepository, times(1)).save(foyer);
     }
 
