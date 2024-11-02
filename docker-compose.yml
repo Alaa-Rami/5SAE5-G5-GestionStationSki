@@ -1,34 +1,40 @@
-version: "3.8"
+version: '3.8'
 
 services:
   mysqldb:
-    image: mysql:5.7
+    image: mysql:8.0
     restart: unless-stopped
     environment:
-      - MYSQL_ROOT_PASSWORD=root
-      - MYSQL_DATABASE=tpfoyer
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: tpfoyer
     ports:
       - "3306:3306"
     volumes:
       - db:/var/lib/mysql
-  app-timesheet:
+
+  app-spring:
     depends_on:
       - mysqldb
-    build : ./
+    build: ./
     restart: on-failure
     ports:
-      - 8089:8089
+      - "8069:8069"
     environment:
       SPRING_APPLICATION_JSON: '{
-        "spring.datasource.url"  : "jdbc:mysql://mysqldb:3306/tpfoyer_db?createDatabaseIfNotExist=true",
-        "spring.datasource.username" : "root",
-        "spring.datasource.password" : "root",
-        "spring.jpa.hibernate.ddl-auto" : "update"
-      }'
-
-
+        "spring.datasource.url": "jdbc:mysql://mysqldb:3306/tpfoyer?createDatabaseIfNotExist=true",
+        "spring.datasource.username": "root",
+        "spring.datasource.password": "root",
+        "spring.jpa.hibernate.ddl-auto": "update"}'
     stdin_open: true
     tty: true
 
+  app-angular:
+    depends_on:
+      - app-spring
+    build: ./
+    ports:
+      - "4200:4200"
+    restart: on-failure
+
 volumes:
-  db :
+  db:
