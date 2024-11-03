@@ -13,6 +13,7 @@ services:
       - db:/var/lib/mysql
 
   app:
+    image: tp-foyer:latest
     build: ./
     depends_on:
       - mysqldb
