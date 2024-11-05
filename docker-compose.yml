@@ -1,4 +1,4 @@
-#version: '3.8'
+version: '3.8'
 
 services:
   mysqldb:
@@ -28,13 +28,13 @@ services:
     stdin_open: true
     tty: true
 
-  app-angular:
-    depends_on:
-      - app-spring
-    build: ./
-    ports:
-      - "4200:4200"
-    restart: on-failure
+#  app-angular:
+#    depends_on:
+#      - app-spring
+#    build: ./
+#    ports:
+#      - "4200:4200"
+#    restart: on-failure
 
 volumes:
   db:
