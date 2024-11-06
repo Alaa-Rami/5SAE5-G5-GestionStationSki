@@ -85,18 +85,21 @@ public class ChambreServiceImplTest {
 
     @Test
     public void testRetrieveChambre_NotFound() {
-        // Arrange : Définir le comportement du mock pour findById()
+        // Arrange : Simuler un Optional vide retourné par le mock
         when(chambreRepositoryMock.findById(999L)).thenReturn(Optional.empty());
 
         // Act : Appeler la méthode du service
-        Chambre result = chambreService.retrieveChambre(999L);
+        Exception exception = assertThrows(Exception.class, () -> {
+            chambreService.retrieveChambre(999L); // Cette méthode devrait lancer une exception
+        });
 
-        // Assert : Vérifier que la chambre retournée est null
-        assertNull(result);
+        // Assert : Vérifier que l'exception attendue a bien été lancée
+        assertEquals("Chambre non trouvée", exception.getMessage());
 
         // Vérifier que findById a été appelé avec l'ID 999
         verify(chambreRepositoryMock, times(1)).findById(999L);
     }
+
 
     @Test
     public void testAddChambre() {
