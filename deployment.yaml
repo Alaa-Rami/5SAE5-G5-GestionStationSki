@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tpfoyer
+  labels:
+    app: tpfoyer
+spec:
+  replicas: 2  # Number of pods to run
+  selector:
+    matchLabels:
+      app: tpfoyer
+  template:
+    metadata:
+      labels:
+        app: tpfoyer
+    spec:
+      containers:
+        - name: tpfoyer-container
+          image: louhichidaly/jenkins:latest
+          ports:
+            - containerPort: 8089
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: jdbc:mysql://mysqldb:3306/tpfoyer?createDatabaseIfNotExist=true
+            - name: SPRING_DATASOURCE_USERNAME
+              value: root
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: root
