@@ -13,6 +13,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -88,12 +89,12 @@ public class ChambreServiceImplTest {
         // Arrange : Simuler un Optional vide retourné par le mock
         when(chambreRepositoryMock.findById(999L)).thenReturn(Optional.empty());
 
-        // Act : Appeler la méthode du service
-        Exception exception = assertThrows(Exception.class, () -> {
-            chambreService.retrieveChambre(999L); // Cette méthode devrait lancer une exception
+        // Act & Assert : Vérifier que l'exception attendue est levée
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () -> {
+            chambreService.retrieveChambre(999L); // Cette méthode doit lancer l'exception
         });
 
-        // Assert : Vérifier que l'exception attendue a bien été lancée
+        // Vérifier que le message d'exception correspond à l'attendu
         assertEquals("Chambre non trouvée", exception.getMessage());
 
         // Vérifier que findById a été appelé avec l'ID 999
