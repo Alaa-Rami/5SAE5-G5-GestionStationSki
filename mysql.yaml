@@ -33,7 +33,7 @@ spec:
               mountPath: /var/lib/mysql
       volumes:
         - name: mysql-storage
-          emptyDir: {}  
+          emptyDir: {}
 
 ---
 apiVersion: v1
