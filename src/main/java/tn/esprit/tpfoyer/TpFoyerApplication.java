@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableScheduling
 @EnableAspectJAutoProxy
 public class TpFoyerApplication {
-
     public static void main(String[] args) {
         SpringApplication.run(TpFoyerApplication.class, args);
     }
