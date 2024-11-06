@@ -9,6 +9,8 @@ import tn.esprit.tpfoyer.entity.TypeChambre;
 import tn.esprit.tpfoyer.repository.ChambreRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -26,9 +28,13 @@ public class ChambreServiceImpl implements IChambreService {
     }
 
     public Chambre retrieveChambre(Long chambreId) {
-        Chambre c = chambreRepository.findById(chambreId).get();
-        return c;
+        try {
+            return chambreRepository.findById(chambreId).get();
+        } catch (NoSuchElementException e) {
+            throw new NoSuchElementException("Chambre non trouvée");
+        }
     }
+
 
     public Chambre addChambre(Chambre c) {
         Chambre chambre = chambreRepository.save(c);
