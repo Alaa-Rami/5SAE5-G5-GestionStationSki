@@ -17,7 +17,7 @@ import java.util.Set;
 @ToString
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class Bloc {
-
+//commentaire test
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     long idBloc;
